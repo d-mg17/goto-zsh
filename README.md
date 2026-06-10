@@ -10,11 +10,10 @@ A simple shell function to manage and navigate to custom directory mappings.
 git clone https://github.com/luisya22/goto.git
 ```
 
-2. Source the goto.sh script in your .bashrc file:
+2. Navigate into the cloned folder and source the script into your .bashrc:
 ```sh
-echo "source /path/to/goto/goto.sh" >> ~/.bashrc
-# Replace /path/to/goto with the actual absolute path where the goto repository is cloned 
-# For example, if it is at home: ~/goto/goto.sh
+cd goto
+echo "source $(pwd)/goto.sh" >> ~/.bashrc
 ```
 
 
