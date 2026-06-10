@@ -1,10 +1,8 @@
 #!/bin/bash
 
-goto() {
-    if [ ! -f ~/.goto_mappings ]; then
-        touch ~/.goto_mappings
-    fi
+[ ! -f ~/.goto_mappings ] && touch ~/.goto_mappings
 
+goto() {
     if [ "$1" == "add" ]; then
         echo "$2 $3" >> ~/.goto_mappings
         return
