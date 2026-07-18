@@ -3,17 +3,17 @@
 [ ! -f ~/.goto_mappings ] && touch ~/.goto_mappings
 
 goto() {
-    if [ "$1" == "add" ]; then
+    if [ "$1" = "add" ]; then
         echo "$2 $3" >> ~/.goto_mappings
         return
-    elif [ "$1" == "remove" ]; then
+    elif [ "$1" = "remove" ]; then
         sed -i "/^$2 /d" ~/.goto_mappings
         return
-    elif [ "$1" == "update" ]; then
+    elif [ "$1" = "update" ]; then
         sed -i "/^$2 /d" ~/.goto_mappings
         echo "$2 $3" >> ~/.goto_mappings
         return
-    elif [ "$1" == "list" ]; then
+    elif [ "$1" = "list" ]; then
         awk '{print "• " $1 ": " $2}' ~/.goto_mappings
         return
     fi
@@ -26,17 +26,29 @@ goto() {
     fi
 }
 
-_goto_completion() {
-    local cur prev opts names
-    COMPREPLY=()
-    cur="${COMP_WORDS[COMP_CWORD]}"
-    
-    # Collect custom names from the mapping file.
-    names=$(awk '{print $1}' ~/.goto_mappings)
-
-    # Offer those names as autocompletion suggestions.
-    COMPREPLY=( $(compgen -W "${names}" -- ${cur}) )
-    return 0
+_goto_names() {
+    awk '{print $1}' ~/.goto_mappings
 }
 
-complete -F _goto_completion goto
+if [ -n "$ZSH_VERSION" ]; then
+    _goto_completion() {
+        local -a subs names
+        subs=(add remove update list)
+        names=(${(f)"$(_goto_names)"})
+        if (( CURRENT == 2 )); then
+            compadd -- "${subs[@]}" "${names[@]}"
+        fi
+    }
+    whence compdef >/dev/null || { autoload -Uz compinit; compinit -i; }
+    compdef _goto_completion goto
+elif [ -n "$BASH_VERSION" ]; then
+    _goto_completion() {
+        local cur names
+        COMPREPLY=()
+        cur="${COMP_WORDS[COMP_CWORD]}"
+        names=$(_goto_names)
+        COMPREPLY=( $(compgen -W "add remove update list ${names}" -- ${cur}) )
+        return 0
+    }
+    complete -F _goto_completion goto
+fi
