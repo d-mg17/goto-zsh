@@ -10,16 +10,18 @@ A simple shell function to manage and navigate to custom directory mappings.
 git clone https://github.com/luisya22/goto.git
 ```
 
-2. Navigate into the cloned folder and source the script into your .bashrc:
+2. Navigate into the cloned folder and source the script into your shell rc file (`.bashrc` for bash, `.zshrc` for zsh):
 ```sh
 cd goto
-echo "source $(pwd)/goto.sh" >> ~/.bashrc
+echo "source $(pwd)/goto.sh" >> ~/.bashrc   # bash
+echo "source $(pwd)/goto.sh" >> ~/.zshrc    # zsh
 ```
 
 
-3. Reload your .bashrc file:
+3. Reload your rc file:
 ```sh
-source ~/.bashrc
+source ~/.bashrc   # bash
+source ~/.zshrc    # zsh
 ```
 
 ## Usage:
